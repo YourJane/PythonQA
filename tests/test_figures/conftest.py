@@ -1,8 +1,8 @@
 import pytest
-from src.Rectangle import Rectangle
-from src.Square import Square
-from src.Circle import Circle
-from src.Triangle import Triangle
+from src.figure_classes.Rectangle import Rectangle
+from src.figure_classes.Square import Square
+from src.figure_classes.Circle import Circle
+from src.figure_classes.Triangle import Triangle
 
 
 @pytest.fixture(scope="session")

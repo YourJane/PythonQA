@@ -1,4 +1,4 @@
-from src.Figure import Figure
+from src.figure_classes.Figure import Figure
 from math import pi
 
 

@@ -4,13 +4,23 @@ from jsonschema import validate
 import re
 
 
-def test_breeds_list(base_url):
-    target = requests.get(base_url+"list/all")
+def test_breeds_list(base_url_breeds):
+    target = requests.get(base_url_breeds+"list/all")
 
     schema = {
         "type": "object",
         "properties": {
-            "message": {"type": "object"},
+            "message": {
+                "type": "object",
+                "patternProperties": {
+                    "/\D+/": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                    }
+                }
+            },
             "status": {"type": "string"}
         },
         "required": ["message", "status"]
@@ -19,8 +29,8 @@ def test_breeds_list(base_url):
     validate(instance=target.json(), schema=schema)
 
 
-def test_random_image(base_url, get_all_breeds_list):
-    target = requests.get(base_url+"image/random")
+def test_random_image(base_url_breeds, get_all_breeds_list):
+    target = requests.get(base_url_breeds+"image/random")
     response = target.json()
     response_url = response["message"].split("/")
     assert target.status_code == 200, f"Status code is {target.status_code}, expected 200"
@@ -53,8 +63,8 @@ def test_breed_images(breed_index, get_all_breeds_list, base_url_breed):
                              (50, 50),
                              (51, 50)
                          ])
-def test_count_displayed_images(selected_amount, expected_amount, base_url):
-    target = requests.get(base_url + "image/random/" + f"{selected_amount}")
+def test_count_displayed_images(selected_amount, expected_amount, base_url_breeds):
+    target = requests.get(base_url_breeds + "image/random/" + f"{selected_amount}")
     response = target.json()
     images = []
     for url in response['message']:

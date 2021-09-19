@@ -36,6 +36,8 @@ def test_display_breweries_per_page(base_url, per_page, expected):
 @pytest.mark.parametrize("query", ["maryland", "territor"])
 def test_search_breweries(base_url, query):
     target = requests.get(base_url + f"/search?query={query}")
+
+    assert target.status_code == 200, f"Status code is {target.status_code}, expected 200"
     for brewery in target.json():
         brewery_values = ""
         for value in brewery.values():
@@ -50,6 +52,8 @@ def test_breweries_autocomplete(base_url, query):
     brewery_name_list = []
     for brewery in target.json():
         brewery_name_list.append(brewery.get("name"))
+
+    assert target.status_code == 200, f"Status code is {target.status_code}, expected 200"
 
     for name in brewery_name_list:
         assert query in name, f"The name of the brewery should contain {query}"
